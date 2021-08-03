@@ -1,5 +1,28 @@
 local function all(msg)
 local text = msg.content_.text_
+function s_api(web) 
+local info, res = https.request(web) 
+local req = json:decode(info)
+ if res ~= 200 then 
+return false 
+end 
+if not req.ok then 
+return false
+end 
+return req 
+end 
+local function sendText(chat_id, text, reply_to_message_id, markdown) 
+send_api = "https://api.telegram.org/bot"..token
+local url = send_api..'/sendMessage?chat_id=' .. chat_id .. '&text=' .. URL.escape(text)
+if reply_to_message_id ~= 0 then 
+url = url .. '&reply_to_message_id=' .. reply_to_message_id 
+ end if markdown == 'md' or markdown == 'markdown' then 
+url = url..'&parse_mode=Markdown' 
+elseif markdown == 'html' then
+ url = url..'&parse_mode=HTML' 
+end 
+return s_api(url)  
+end
 if text == "@all" and BasicConstructor(msg) then
 if not database:get(bot_id..'Cick:all'..msg.chat_id_) then
 if database:get(bot_id.."VVVZVV:all:Time"..msg.chat_id_..':'..msg.sender_user_id_) then  
@@ -25,7 +48,7 @@ tagname = tagname:gsub("[[]","")
 t = t..", ["..tagname.."](tg://user?id="..v.user_id_..")"
 if x == 5 or x == tags or k == 0 then
 local Text = t:gsub('#all,','#all\n')
-send(msg.chat_id_, 0,Text)
+sendText(msg.chat_id_,Text,0,'md')
 end
 end,nil)
 end
